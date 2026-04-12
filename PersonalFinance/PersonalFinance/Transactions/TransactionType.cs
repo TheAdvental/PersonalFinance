@@ -1,4 +1,4 @@
-﻿namespace PersonalFinance.FinTransactions
+﻿namespace PersonalFinance.Transactions
 {
     public enum TransactionType
     {

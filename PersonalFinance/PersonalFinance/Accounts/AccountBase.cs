@@ -1,16 +1,17 @@
-﻿using PersonalFinance.FinTransactions;
+﻿using PersonalFinance.Transactions;
+using PersonalFinance.Currencies;
 
-namespace PersonalFinance.Account
+namespace PersonalFinance.Accounts
 {
     public abstract class AccountBase
     {
         public string Name { get; set; }
         public decimal CurrentBalance { get; set; }
-        public string AccountCurrency { get; set; }
+        public CurrencyType AccountCurrency { get; set; }
         private List<Transaction> LinkedTransactions { get; set; } = new List<Transaction>();
         public List<Transaction> Transactions => LinkedTransactions;
 
-        protected AccountBase(string name, decimal currBal, string accCurr)
+        protected AccountBase(string name, decimal currBal, CurrencyType accCurr)
         {
             Name = name;
             CurrentBalance = currBal;

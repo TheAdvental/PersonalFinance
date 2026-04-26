@@ -18,11 +18,19 @@ namespace PersonalFinance.Accounts
             AccountCurrency = accCurr;
         }
 
-        public virtual void Deposit (Transaction transaction)
+        public virtual void ProcessTransaction(Transaction tr)
         {
-            //CurrentBalance += depSum;
+            if (tr.TransactionType == TransactionType.Income)
+            {
+                CurrentBalance += tr.MoneyAmount;
+            }
+            else if (tr.TransactionType == TransactionType.Expense)
+            {
+                CurrentBalance -= tr.MoneyAmount;
+            }
+            LinkedTransactions.Add(tr);
         }
 
-        public abstract void Withdraw(decimal withSum);
+
     }
 }

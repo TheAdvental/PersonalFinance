@@ -10,6 +10,7 @@ namespace PersonalFinance.Transactions
         Entertainment,
         Sports,
         Travels,
-        Charity
+        Charity,
+        Debts
     }
 }

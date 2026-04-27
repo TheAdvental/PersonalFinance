@@ -9,7 +9,7 @@ namespace PersonalFinance.Accounts
         public decimal CurrentBalance { get; set; }
         public CurrencyType AccountCurrency { get; set; }
         private List<Transaction> LinkedTransactions { get; set; } = new List<Transaction>();
-        public List<Transaction> Transactions => LinkedTransactions;
+        public IReadOnlyList<Transaction> Transactions => LinkedTransactions;
 
         protected AccountBase(string name, decimal currBal, CurrencyType accCurr)
         {
@@ -30,7 +30,5 @@ namespace PersonalFinance.Accounts
             }
             LinkedTransactions.Add(tr);
         }
-
-
     }
 }

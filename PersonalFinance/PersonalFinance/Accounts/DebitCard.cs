@@ -8,24 +8,17 @@ namespace PersonalFinance.Accounts
     {
         public DebitCard(string name, decimal currBal, CurrencyType accCurr) : base(name, currBal, accCurr)
         {
-            Name = name;
-            CurrentBalance = currBal;
-            AccountCurrency = accCurr;
+
         }
 
         public override void ProcessTransaction(Transaction tr)
         {
-            if (tr.TransactionType == TransactionType.Income)
+            if (tr.TransactionType == TransactionType.Expense && CurrentBalance < tr.MoneyAmount)
             {
-                CurrentBalance += tr.MoneyAmount;
+                throw new InsufficientFundsException($"Недостатньо коштів для здійснення операції. Ваш баланс: {CurrentBalance}");
             }
-            if (tr.TransactionType == TransactionType.Expense)
-            {
-                if (CurrentBalance < tr.MoneyAmount)
-                {
-                    throw new InsufficientFundsException($"Недостатньо коштів на рахунку. Ваш баланс: {CurrentBalance}");
-                }
-            }
+
+            base.ProcessTransaction(tr);
         }
     }
 }

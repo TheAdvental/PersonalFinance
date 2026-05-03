@@ -37,7 +37,7 @@ namespace PersonalFinance.Accounts
 
             decimal interestsSum = Math.Abs(CurrentBalance) * InterestRate;
 
-            Transaction fee = new Transaction("Комісія по кредиту", 999, interestsSum, TransactionType.Expense, TransactionCategory.Debts);
+            Transaction fee = new Transaction("Комісія по кредиту", interestsSum, TransactionType.Expense, TransactionCategory.Debts);
 
             ProcessTransaction(fee);
         }

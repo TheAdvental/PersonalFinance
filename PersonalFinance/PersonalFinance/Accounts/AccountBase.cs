@@ -5,6 +5,9 @@ namespace PersonalFinance.Accounts
 {
     public abstract class AccountBase
     {
+        public delegate void TransactionAddedHandler(Transaction tr, AccountBase senderAccount);
+        public event TransactionAddedHandler OnTransactionAdded;
+
         public string Name { get; set; }
         public decimal CurrentBalance { get; set; }
         public CurrencyType AccountCurrency { get; set; }
@@ -29,6 +32,8 @@ namespace PersonalFinance.Accounts
                 CurrentBalance -= tr.MoneyAmount;
             }
             LinkedTransactions.Add(tr);
+
+            OnTransactionAdded?.Invoke(tr, this);
         }
     }
 }

@@ -17,12 +17,9 @@ namespace PersonalFinance.Accounts
 
         public override void ProcessTransaction(Transaction tr)
         {
-            if (tr.TransactionType == TransactionType.Expense)
+            if (tr.TransactionType == TransactionType.Expense && AvailableFunds < tr.MoneyAmount)
             {
-                if (AvailableFunds < tr.MoneyAmount)
-                {
-                    throw new InsufficientFundsException($"Недостатньо коштів для здійснення операції. Ваш баланс: {CurrentBalance}");
-                }
+                throw new InsufficientFundsException($"Недостатньо коштів для здійснення операції. Ваш баланс: {CurrentBalance}");
             }
 
             base.ProcessTransaction(tr);

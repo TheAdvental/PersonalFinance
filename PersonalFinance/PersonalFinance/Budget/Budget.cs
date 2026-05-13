@@ -12,6 +12,7 @@ namespace PersonalFinance.Budget
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public event Action<Budget> OnBudgetExceeded;
         public Budget(decimal limit, DateTime start, DateTime end, AccountBase targetAcc, TransactionCategory targetCat)
         {
             LimitAmount = limit;
@@ -27,6 +28,36 @@ namespace PersonalFinance.Budget
 
         public Budget(decimal limit, DateTime start, DateTime end, AccountBase targetAccount) : this(limit, start, end, targetAccount, null)
         {
+        }
+
+        public void ProcessNewTransaction(Transaction tr, AccountBase senderAccount)
+        {
+            if (tr.TransactionType != TransactionType.Expense)
+            {
+                return;
+            }
+
+            if (tr.Date < StartDate || tr.Date > EndDate)
+            {
+                return;
+            }
+
+            if (TargetAccount != null && TargetAccount != senderAccount)
+            {
+                return;
+            }
+
+            if (TargetCategory != null && !tr.TransactionCategory.IsSubCategoryOf(TargetCategory))
+            {
+                return;
+            }
+
+            CurrentSpend += tr.MoneyAmount;
+
+            if (CurrentSpend > LimitAmount)
+            {
+                OnBudgetExceeded?.Invoke(this);
+            }
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿using PersonalFinance.Transactions;
-using PersonalFinance.Currencies;
+﻿using PersonalFinance.Currencies;
+using PersonalFinance.Transactions;
+using System.Text.Json.Serialization;
 
 namespace PersonalFinance.Accounts
 {
+    [JsonDerivedType(typeof(DebitCard), typeDiscriminator: "debit")]
+    [JsonDerivedType(typeof(CreditCard), typeDiscriminator: "credit")]      
     public abstract class AccountBase
     {
         public delegate void TransactionAddedHandler(Transaction tr, AccountBase senderAccount);

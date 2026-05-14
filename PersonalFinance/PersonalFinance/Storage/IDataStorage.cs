@@ -2,7 +2,7 @@
 
 namespace PersonalFinance.Storage
 {
-    public interface IDataService
+    public interface IDataStorage
     {
         public void SaveAccounts(List<AccountBase> accounts, string filePath);
         List<AccountBase> LoadAccounts(string filePath);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -13,6 +13,8 @@ namespace PersonalFinance.Transactions
         public TransactionCategory ParentCategory { get; set; }
         private List<TransactionCategory> _subCategories = new List<TransactionCategory>();
         public IReadOnlyList<TransactionCategory> SubCategories => _subCategories;
+        
+        public TransactionCategory() {}
         
         public TransactionCategory(string name)
         {
@@ -42,11 +44,13 @@ namespace PersonalFinance.Transactions
             return false;
         }
 
-        public static TransactionCategory Groceries => new TransactionCategory("Продукти");
-        public static TransactionCategory Entertainment => new TransactionCategory("Розваги");
-        public static TransactionCategory Sports => new TransactionCategory("Спорт");
-        public static TransactionCategory Travels => new TransactionCategory("Подорожі");
-        public static TransactionCategory Charity => new TransactionCategory("Благодійність");
-        public static TransactionCategory Debts => new TransactionCategory("Борги");
+        public static TransactionCategory Groceries { get; } = new TransactionCategory("Продукти");
+        public static TransactionCategory Entertainment { get; } = new TransactionCategory("Розваги");
+        public static TransactionCategory Sports { get; } = new TransactionCategory("Спорт");
+        public static TransactionCategory Travels { get; } = new TransactionCategory("Подорожі");
+        public static TransactionCategory Charity { get; } = new TransactionCategory("Благодійність");
+        public static TransactionCategory Debts { get; } = new TransactionCategory("Борги");
+        public static TransactionCategory Salary { get; } = new TransactionCategory("Зарплата");
+        public static TransactionCategory Other { get; } = new TransactionCategory("Інше");
     }
 }

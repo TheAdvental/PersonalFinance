@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using PersonalFinance.Accounts;
 using PersonalFinance.UI_Elements;
 
@@ -8,16 +8,16 @@ namespace PersonalFinance.Storage
     {
         private JsonSerializerOptions _options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
+            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
         };
 
-        public void SaveAccounts(List<AccountBase> accounts, string filePath)
+        public async Task SaveAccountsAsync(List<AccountBase> accounts, string filePath)
         {
             try
             {
-                string jsonString = JsonSerializer.Serialize(accounts, _options);
-
-                File.WriteAllText(filePath, jsonString);
+                using FileStream createStream = File.Create(filePath);
+                await JsonSerializer.SerializeAsync(createStream, accounts, _options);
 
                 ConsoleUI.ShowSuccessMessage("Збережено успішно");
             }
@@ -27,7 +27,7 @@ namespace PersonalFinance.Storage
             }
         }
 
-        public List<AccountBase> LoadAccounts(string filePath)
+        public async Task<List<AccountBase>> LoadAccountsAsync(string filePath)
         {
             if (!File.Exists(filePath))
             {
@@ -36,14 +36,13 @@ namespace PersonalFinance.Storage
 
             try
             {
-                string jsonString = File.ReadAllText(filePath);
-
-                if (string.IsNullOrWhiteSpace(jsonString))
+                using FileStream openStream = File.OpenRead(filePath);
+                if (openStream.Length == 0)
                 {
                     return new List<AccountBase>();
                 }
 
-                return JsonSerializer.Deserialize<List<AccountBase>>(jsonString, _options) ?? new List<AccountBase>();
+                return await JsonSerializer.DeserializeAsync<List<AccountBase>>(openStream, _options) ?? new List<AccountBase>();
             }
             catch (Exception ex)
             {

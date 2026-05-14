@@ -9,13 +9,22 @@ namespace PersonalFinance.UI_Elements
         public static void TransactionsOutput(AccountBase account)
         {
             Console.WriteLine($"Історія транзакцій з рахунку {account.Name}:");
+            TransactionsListOutput(account.Transactions, account.AccountCurrency);
+        }
 
-            foreach (Transaction tr in account.Transactions)
+        public static void TransactionsListOutput(IReadOnlyList<Transaction> transactions, CurrencyType accountCurrency)
+        {
+            if (transactions.Count == 0)
             {
-                Console.Write($"{tr.Date.ToShortDateString()} - {tr.Name}: ");
+                Console.WriteLine("Транзакцій немає.");
+                return;
+            }
 
-                DrawColoredMoneyAmount(tr, account.AccountCurrency);
-
+            for (int i = 0; i < transactions.Count; i++)
+            {
+                Transaction tr = transactions[i];
+                Console.Write($"{i + 1}. {tr.Date.ToShortDateString()} - {tr.Name} [{tr.TransactionCategory.Name}]: ");
+                DrawColoredMoneyAmount(tr, accountCurrency);
                 Console.WriteLine();
             }
         }
@@ -48,6 +57,52 @@ namespace PersonalFinance.UI_Elements
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ResetColor();
+        }
+
+        public static int ShowInteractiveMenu(string title, string[] options)
+        {
+            int selectedIndex = 0;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"\n=== {title} ===\n");
+
+                for (int i = 0; i < options.Length; i++)
+                {
+                    if (i == selectedIndex)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine($"> {options[i]} ");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"  {options[i]} ");
+                    }
+                    Console.ResetColor();
+                }
+
+                ConsoleKey key = Console.ReadKey(true).Key;
+
+                if (key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+                else if (key == ConsoleKey.UpArrow)
+                {
+                    selectedIndex--;
+                    if (selectedIndex < 0) selectedIndex = options.Length - 1;
+                }
+                else if (key == ConsoleKey.DownArrow)
+                {
+                    selectedIndex++;
+                    if (selectedIndex >= options.Length) selectedIndex = 0;
+                }
+            }
+
+            Console.Clear();
+            return selectedIndex;
         }
     }
 }

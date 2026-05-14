@@ -1,4 +1,4 @@
-﻿namespace PersonalFinance.Transactions
+namespace PersonalFinance.Transactions
 {
     public class Transaction
     {
@@ -20,5 +20,7 @@
         public Transaction(string name, decimal money, TransactionType trnType, TransactionCategory trnCategory) : this(name, money, trnType, trnCategory, DateTime.Now)
         {
         }
+
+        public Transaction() {}
     }
 }

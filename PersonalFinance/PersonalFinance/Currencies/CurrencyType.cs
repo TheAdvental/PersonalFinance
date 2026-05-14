@@ -1,11 +1,11 @@
-﻿using System.Security;
+using System.Security;
 
 namespace PersonalFinance.Currencies
 {
     public struct CurrencyType
     {
-        public string Code { get; }
-        public string Symbol { get; }
+        public string Code { get; set; }
+        public string Symbol { get; set; }
 
         public CurrencyType(string code, string symbol)
         {

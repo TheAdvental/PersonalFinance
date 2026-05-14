@@ -6,15 +6,15 @@ namespace PersonalFinance.Storage
 {
     public class CsvStorage : IDataStorage
     {
-        public void SaveAccounts(List<AccountBase> accounts, string filePath)
+        public async Task SaveAccountsAsync(List<AccountBase> accounts, string filePath)
         {
             try
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("AccountType,Name,CurrentBalance,CurrencyCode");
+                    await writer.WriteLineAsync("AccountType,Name,CurrentBalance,CurrencyCode");
 
-                    foreach (var account in accounts)
+                    foreach (AccountBase account in accounts)
                     {
                         string accountType;
                         if (account is CreditCard)
@@ -27,7 +27,7 @@ namespace PersonalFinance.Storage
                         }
 
                         string line = $"{accountType},{account.Name},{account.CurrentBalance.ToString(CultureInfo.InvariantCulture)},{account.AccountCurrency.Code}";
-                        writer.WriteLine(line);
+                        await writer.WriteLineAsync(line);
                     }
                 }
             }
@@ -37,9 +37,9 @@ namespace PersonalFinance.Storage
             }
         }
 
-        public List<AccountBase> LoadAccounts(string filePath)
+        public async Task<List<AccountBase>> LoadAccountsAsync(string filePath)
         {
-            var accounts = new List<AccountBase>();
+            List<AccountBase> accounts = new List<AccountBase>();
 
             if (!File.Exists(filePath))
             {
@@ -50,49 +50,12 @@ namespace PersonalFinance.Storage
             {
                 using (StreamReader reader = new StreamReader(filePath))
                 {
-                    string header = reader.ReadLine();
+                    string header = await reader.ReadLineAsync();
 
                     string line;
-                    while ((line = reader.ReadLine()) != null)
+                    while ((line = await reader.ReadLineAsync()) != null)
                     {
-                        if (string.IsNullOrWhiteSpace(line))
-                        {
-                            continue;
-                        }
-
-                        string[] parts = line.Split(',');
-                        if (parts.Length >= 4)
-                        {
-                            string type = parts[0];
-                            string name = parts[1];
-                            decimal balance = decimal.Parse(parts[2], CultureInfo.InvariantCulture);
-
-                            CurrencyType currency;
-                            switch (parts[3])
-                            {
-                                case "USD":
-                                    currency = CurrencyType.USD; 
-                                    break;
-                                case "EUR":
-                                    currency = CurrencyType.EUR;
-                                    break;
-                                case "UAH":
-                                    currency = CurrencyType.UAH;
-                                    break;
-                                default:
-                                    currency = new CurrencyType(parts[3], parts[3]);
-                                    break;
-                            }
-
-                            if (type == "CreditCard")
-                            {
-                                accounts.Add(new CreditCard(name, balance, currency, 5000, 0.05m));
-                            }
-                            else
-                            {
-                                accounts.Add(new DebitCard(name, balance, currency));
-                            }
-                        }
+                        ProcessCsvLine(line, accounts);
                     }
                 }
             }
@@ -102,6 +65,50 @@ namespace PersonalFinance.Storage
             }
 
             return accounts;
+        }
+
+        private void ProcessCsvLine(string line, List<AccountBase> accounts)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
+            string[] parts = line.Split(',');
+            if (parts.Length < 4)
+            {
+                return;
+            }
+
+            string type = parts[0];
+            string name = parts[1];
+            decimal balance = decimal.Parse(parts[2], CultureInfo.InvariantCulture);
+            
+            CurrencyType currency = DetermineCurrency(parts[3]);
+
+            if (type == "CreditCard")
+            {
+                accounts.Add(new CreditCard(name, balance, currency, 5000, 0.05m));
+            }
+            else
+            {
+                accounts.Add(new DebitCard(name, balance, currency));
+            }
+        }
+
+        private CurrencyType DetermineCurrency(string currencyCode)
+        {
+            switch (currencyCode)
+            {
+                case "USD": 
+                    return CurrencyType.USD;
+                case "EUR":
+                    return CurrencyType.EUR;
+                case "UAH": 
+                    return CurrencyType.UAH;
+                default: 
+                    return new CurrencyType(currencyCode, currencyCode);
+            }
         }
     }
 }

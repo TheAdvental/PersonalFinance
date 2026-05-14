@@ -1,0 +1,77 @@
+{
+  "$id": "1",
+  "$values": [
+    {
+      "$id": "2",
+      "$type": "credit",
+      "CreditLimit": 150000000,
+      "InterestRate": 0.1,
+      "AvailableFunds": 697652677,
+      "Name": "\u041C\u0430\u043C\u0438\u043D\u0430 \u043A\u0430\u0442\u0440\u043A\u0430",
+      "CurrentBalance": 547652677,
+      "AccountCurrency": {
+        "Code": null,
+        "Symbol": null
+      },
+      "LinkedTransactions": {
+        "$id": "3",
+        "$values": [
+          {
+            "$id": "4",
+            "Name": "\u041A\u0430\u0440\u0442\u043F\u043E\u043B\u044F 2\u043A\u0433",
+            "Id": "dd0c28c6-cc55-4ae9-9b06-e18ed6f4189a",
+            "MoneyAmount": 15000,
+            "TransactionType": 1,
+            "TransactionCategory": {
+              "$id": "5",
+              "Name": "\u041F\u0440\u043E\u0434\u0443\u043A\u0442\u0438",
+              "Description": null,
+              "ParentCategory": null,
+              "SubCategories": {
+                "$id": "6",
+                "$values": []
+              }
+            },
+            "Date": "2026-05-15T02:11:16.4171421+03:00"
+          },
+          {
+            "$id": "7",
+            "Name": "\u0417\u041F",
+            "Id": "71167db9-07d7-4717-8754-1d911db53dd3",
+            "MoneyAmount": 400000000,
+            "TransactionType": 0,
+            "TransactionCategory": {
+              "$id": "8",
+              "Name": "\u0417\u0430\u0440\u043F\u043B\u0430\u0442\u0430",
+              "Description": null,
+              "ParentCategory": null,
+              "SubCategories": {
+                "$id": "9",
+                "$values": []
+              }
+            },
+            "Date": "2026-05-15T02:11:57.5923509+03:00"
+          },
+          {
+            "$id": "10",
+            "Name": "\u042F \u043D\u0435 \u0437\u043D\u0430\u044E",
+            "Id": "4bf305d3-ce4b-408c-8818-9c5d45e65633",
+            "MoneyAmount": 2332323,
+            "TransactionType": 1,
+            "TransactionCategory": {
+              "$id": "11",
+              "Name": "\u0420\u043E\u0437\u0432\u0430\u0433\u0438",
+              "Description": null,
+              "ParentCategory": null,
+              "SubCategories": {
+                "$id": "12",
+                "$values": []
+              }
+            },
+            "Date": "2026-05-15T02:12:17.3522899+03:00"
+          }
+        ]
+      }
+    }
+  ]
+}

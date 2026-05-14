@@ -1,7 +1,7 @@
-﻿using PersonalFinance.Accounts;
+using PersonalFinance.Accounts;
 using PersonalFinance.Transactions;
 
-namespace PersonalFinance.Budget
+namespace PersonalFinance.Budgets
 {
     public class Budget
     {
